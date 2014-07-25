@@ -23,7 +23,7 @@ before_script:
   - composer install --no-interaction
 
 script:
-  - ./vendor/bin/phpunit -c app
+  - ./vendor/bin/phpunit
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
