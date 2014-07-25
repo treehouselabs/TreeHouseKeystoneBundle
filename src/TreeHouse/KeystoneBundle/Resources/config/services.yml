@@ -1,0 +1,29 @@
+parameters:
+  tree_house.keystone.token_manager.class: TreeHouse\KeystoneBundle\Manager\TokenManager
+  tree_house.keystone.service_manager.class: TreeHouse\KeystoneBundle\Manager\ServiceManager
+  tree_house.keystone.service.class: TreeHouse\KeystoneBundle\Model\Service
+  tree_house.keystone.listener.exception.class: TreeHouse\KeystoneBundle\EventListener\ExceptionListener
+
+services:
+  tree_house.keystone.service_manager:
+    class: %tree_house.keystone.service_manager.class%
+
+  tree_house.keystone.token_manager:
+    class: %tree_house.keystone.token_manager.class%
+    arguments:
+      - @tree_house.keystone.encoder.token
+      - @doctrine
+
+  # definition for a Keystone service, used as a template in the extension
+  tree_house.keystone.service:
+    class: %tree_house.keystone.service.class%
+    abstract: true
+    arguments:
+      - null # name
+      - null # type
+      - null # role
+
+  tree_house.keystone.listener.exception:
+    class: %tree_house.keystone.listener.exception.class%
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 1000 }

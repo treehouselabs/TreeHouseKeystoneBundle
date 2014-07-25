@@ -1,0 +1,7 @@
+tree_house_keystone:
+  user_class: TreeHouse\KeystoneIntegrationBundle\Entity\User
+  service_types: [foo]
+  services:
+    foo:
+      type: bar
+      endpoint: http://example.org

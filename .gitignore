@@ -1,0 +1,4 @@
+/composer.phar
+/tests/Functional/app/cache
+/tests/Functional/app/logs
+/vendor

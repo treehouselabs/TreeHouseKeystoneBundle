@@ -1,0 +1,9 @@
+tree_house_keystone:
+  user_class: TreeHouse\KeystoneIntegrationBundle\Entity\User
+  service_types: [foo]
+  services:
+    foo:
+      type: foo
+      endpoint: http://example.org
+      role: ROLE_USER
+      expression: '"ROLE_USER" in roles'

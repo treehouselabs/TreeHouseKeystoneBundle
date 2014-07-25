@@ -1,0 +1,42 @@
+parameters:
+  tree_house.keystone.user_provider.default.class: TreeHouse\KeystoneBundle\Security\User\UserProvider
+  tree_house.keystone.token_authenticator.class: TreeHouse\KeystoneBundle\Security\Authentication\TokenAuthenticator
+  tree_house.keystone.authentication.listener.http_post.class: TreeHouse\KeystoneBundle\Security\Firewall\HttpPostAuthenticationListener
+  tree_house.keystone.authentication.provider.user.class: Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider
+  tree_house.keystone.encoder.token.class: TreeHouse\KeystoneBundle\Security\Encoder\TokenEncoder
+
+services:
+  tree_house.keystone.user_provider.default:
+    class: %tree_house.keystone.user_provider.default.class%
+    arguments:
+      - @doctrine
+      - %tree_house.keystone.model.user.class%
+
+  tree_house.keystone.token_authenticator:
+    class: %tree_house.keystone.token_authenticator.class%
+    arguments:
+      - @tree_house.keystone.token_manager
+      - @security.user_checker
+
+  tree_house.keystone.authentication.listener.http_post:
+    class: %tree_house.keystone.authentication.listener.http_post.class%
+    arguments:
+      - @security.context
+      - @security.authentication.manager
+      - null # provider-shared key
+      - @logger
+    tags:
+      - { name: monolog.logger, channel: security }
+
+  tree_house.keystone.authentication.provider.http_post:
+    class: %tree_house.keystone.authentication.provider.user.class%
+    arguments:
+      - @tree_house.keystone.user_provider
+      - @security.user_checker
+      - null # provider-shared key
+      - @security.encoder_factory
+
+  tree_house.keystone.encoder.token:
+    class: %tree_house.keystone.encoder.token.class%
+    arguments:
+      - %secret%
