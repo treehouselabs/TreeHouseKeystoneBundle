@@ -2,7 +2,7 @@
 
 Add dependency:
 
-```
+```sh
 composer require treehouselabs/keystone-bundle:~1.0
 ```
 
