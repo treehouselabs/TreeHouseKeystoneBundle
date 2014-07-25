@@ -51,8 +51,7 @@ you can for example release a new api version, at a new endpoint (ie: `/api/v2/`
 will automatically use the new api.
 
 Users can be linked to a service via a role or an expression (if you have the
-[Expression Language](http://symfony.com/doc/current/components/expression_language/index.html)
-component installed):
+[Expression Language][el] component installed):
 
 ```yaml
 tree_house_keystone:
@@ -77,11 +76,11 @@ Please note that this only restricts the discovery of services to authenticated 
 not provide authorization for your services: you still have to do that yourself! The token only
 authenticates users, meaning it checks if the user's credentials are valid. Authorization is
 the process that checks if a user is allowed to do or access something. Read more about this
-in the [security chapter](http://symfony.com/doc/current/book/security.html#how-security-works-authentication-and-authorization)
+in the [security chapter][security]
 of the Symfony documentation.
 
 ## Public url vs admin url
-A service has both a public url and an admin url. The [Keystone specification]() describes this as:
+A service has both a public url and an admin url. The [Keystone specification][keystone-spec] describes this as:
 
 > **publicUrl**: The URL of the public-facing endpoint for the service
 > (e.g., http://192.168.206.130:9292 or http://192.168.206.130:8774/v2/%(tenant_id)s)
@@ -92,3 +91,7 @@ A service has both a public url and an admin url. The [Keystone specification]()
 The admin endpoint could be different if you want to separate for instance read/write access.
 You'd still have to implement authorization for the different parts of your application, but
 this way you could separate the routes, or even domains. For most use cases though they will be the same.
+
+[el]: http://symfony.com/doc/current/components/expression_language/index.html
+[security]: http://symfony.com/doc/current/book/security.html#how-security-works-authentication-and-authorization
+[keystone-spec]: http://docs.openstack.org/grizzly/openstack-compute/install/apt/content/elements-of-keystone-service-catalog-entry.html
