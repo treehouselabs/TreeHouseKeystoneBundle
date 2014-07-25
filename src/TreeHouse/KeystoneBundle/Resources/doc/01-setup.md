@@ -55,5 +55,6 @@ security:
 
 That's it, now `/api/tokens` will expect authentication using a POST request with json data.
 When the authentication succeeds, a token is returned. This token can be used to access the api
-in our example, by sending it as a header. This is explained in the next chapter.
+in our example, by sending it as a header. This is explained in [chapter 3: authenticating][0].
 
+[0]: 03-authenticating.md
