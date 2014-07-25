@@ -4,6 +4,8 @@ TreeHouseKeystoneBundle
 A Symfony2 implementation of the [OpenStack Identity Service API][1],
 built on top of it's security component.
 
+[![Build Status](https://travis-ci.org/treehouselabs/TreeHouseKeystoneBundle.svg)](https://travis-ci.org/treehouselabs/TreeHouseKeystoneBundle)
+
 You can use this bundle to add a token-based authentication
 mechanism. The token is sent using an HTTP header.
 
