@@ -25,7 +25,9 @@ class Service
     protected $endpoints;
 
     /**
-     * Constructor
+     * @param string $name
+     * @param string $type
+     * @param string $grants
      */
     public function __construct($name, $type, $grants)
     {

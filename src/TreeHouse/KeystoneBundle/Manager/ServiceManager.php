@@ -54,13 +54,15 @@ class ServiceManager
     }
 
     /**
-     * @param string $url
+     * @param string $endpoint
+     *
+     * @throws \OutOfBoundsException When there is no service for the endpoint
      *
      * @return Service
      */
-    public function findServiceByEndpoint($url)
+    public function findServiceByEndpoint($endpoint)
     {
-        $url = $this->getNormalizedUrl($url);
+        $url = $this->getNormalizedUrl($endpoint);
 
         foreach ($this->services as $service) {
             foreach ($service->getEndpoints() as $endpoint) {
@@ -71,7 +73,25 @@ class ServiceManager
             }
         }
 
-        return null;
+        throw new \OutOfBoundsException(sprintf('There is no service for endpoint %s', $url));
+    }
+
+    /**
+     * @param string $name
+     *
+     * @throws \OutOfBoundsException When there is no service with this name
+     *
+     * @return Service
+     */
+    public function findServiceByName($name)
+    {
+        foreach ($this->services as $service) {
+            if ($service->getName() === $name) {
+                return $service;
+            }
+        }
+
+        throw new \OutOfBoundsException(sprintf('There is no service named %s', $name));
     }
 
     /**
