@@ -94,7 +94,7 @@ class TokenController extends Controller
             function (Service $service) use ($securityContext) {
                 $grants = $service->getGrants();
 
-                return !empty($grants) && !$securityContext->isGranted($grants);
+                return empty($grants) || $securityContext->isGranted($grants);
             }
         );
     }
@@ -124,7 +124,7 @@ class TokenController extends Controller
     protected function getUserId(UserInterface $user)
     {
         $class = $this->container->getParameter('tree_house.keystone.model.user.class');
-        $meta = $this->getDoctrine()->getManagerForClass($class)->getClassMetadata($class);
+        $meta  = $this->getDoctrine()->getManagerForClass($class)->getClassMetadata($class);
 
         $ids = $meta->getIdentifierValues($user);
         if (sizeof($ids) === 1) {

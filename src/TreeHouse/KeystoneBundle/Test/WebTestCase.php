@@ -6,7 +6,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -27,34 +26,9 @@ abstract class WebTestCase extends BaseWebTestCase
     protected static $password = '1234';
 
     /**
-     * @var string
-     */
-    protected static $serviceType = 'compute';
-
-    /**
-     * @var string
-     */
-    protected static $serviceName = 'foo';
-
-    /**
-     * @var string
-     */
-    protected static $publicUrl = 'http://example.org/';
-
-    /**
-     * @var string
-     */
-    protected static $adminUrl = 'http://secured.example.org/';
-
-    /**
      * @var UserInterface
      */
     protected $user;
-
-    /**
-     * @var Application
-     */
-    protected static $application;
 
     /**
      * @var Client
@@ -159,8 +133,8 @@ abstract class WebTestCase extends BaseWebTestCase
                 'passwordCredentials' => [
                     'username' => static::$username,
                     'password' => static::$password,
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this->client->request('POST', $this->getRoute('get_token'), [], [], [], json_encode($data));
