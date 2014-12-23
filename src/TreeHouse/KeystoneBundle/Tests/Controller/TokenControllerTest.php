@@ -7,9 +7,6 @@ use TreeHouse\KeystoneBundle\Test\WebTestCase;
 
 class TokenControllerTest extends WebTestCase
 {
-    const HTTP_FORBIDDEN          = 403;
-    const HTTP_METHOD_NOT_ALLOWED = 405;
-
     public function testGetTokenWithInvalidUsername()
     {
         $data = [
@@ -23,7 +20,7 @@ class TokenControllerTest extends WebTestCase
 
         $response = $this->doTokenRequest($data);
 
-        $this->assertEquals(self::HTTP_FORBIDDEN, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
     public function testGetTokenWithInvalidPassword()
@@ -39,21 +36,21 @@ class TokenControllerTest extends WebTestCase
 
         $response = $this->doTokenRequest($data);
 
-        $this->assertEquals(self::HTTP_FORBIDDEN, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
     public function testGetTokenWithoutPostData()
     {
         $response = $this->doTokenRequest('');
 
-        $this->assertEquals(self::HTTP_FORBIDDEN, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
     public function testGetTokenWithBadMethod()
     {
         $response = $this->doTokenRequest('', 'GET');
 
-        $this->assertEquals(self::HTTP_METHOD_NOT_ALLOWED, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_METHOD_NOT_ALLOWED, $response->getStatusCode());
     }
 
     public function testGetTokenWithValidUsernameAndPassword()
@@ -70,28 +67,49 @@ class TokenControllerTest extends WebTestCase
         $response = $this->doTokenRequest($data);
         $result   = json_decode($response->getContent(), true);
 
+        // check for the right structure
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('access', $result);
+        $this->assertInternalType('array', $result['access']);
         $this->assertArrayHasKey('token', $result['access']);
+        $this->assertInternalType('array', $result['access']['token']);
         $this->assertArrayHasKey('id', $result['access']['token']);
+        $this->assertInternalType('string', $result['access']['token']['id']);
 
-        return $result['access']['token']['id'];
+        // check for user info
+        $this->assertArrayHasKey('user', $result['access']);
+        $this->assertInternalType('array', $result['access']['user']);
+        $this->assertArrayHasKey('id', $result['access']['user']);
+        $this->assertArrayHasKey('username', $result['access']['user']);
+        $this->assertEquals(static::$username, $result['access']['user']['username']);
+
+        // check that we have a service catalog (only the api, test user does not have rights to the super secret service)
+        $this->assertArrayHasKey('serviceCatalog', $result['access']);
+        $this->assertInternalType('array', $result['access']['serviceCatalog']);
+        $this->assertCount(1, $result['access']['serviceCatalog']);
+        $this->assertEquals('api', $result['access']['serviceCatalog'][0]['name']);
+        $this->assertEquals('compute', $result['access']['serviceCatalog'][0]['type']);
+
+        $endpoints = [
+            ['adminUrl' => 'http://example.org', 'publicUrl' => 'http://example.org']
+        ];
+        $this->assertEquals($endpoints, $result['access']['serviceCatalog'][0]['endpoints']);
     }
 
-    public function testNonAuthenticatedRequestWithToken()
+    public function testNonAuthenticatedRequest()
     {
         $this->client->request('GET', $this->getRoute('test_api'));
         $repsonse = $this->client->getResponse();
 
-        $this->assertEquals(403, $repsonse->getStatusCode());
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $repsonse->getStatusCode());
     }
 
-    public function testAuthenticatedRequestWithToken()
+    public function testAuthenticatedRequest()
     {
         $this->requestWithValidToken('GET', $this->getRoute('test_api'));
         $repsonse = $this->client->getResponse();
 
-        $this->assertEquals(200, $repsonse->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $repsonse->getStatusCode());
         $this->assertEquals(['ok' => 'it works!'], json_decode($repsonse->getContent(), true));
     }
 
