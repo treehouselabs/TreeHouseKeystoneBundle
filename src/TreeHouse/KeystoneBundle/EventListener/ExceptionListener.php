@@ -9,6 +9,9 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class ExceptionListener
 {
+    /**
+     * @param GetResponseForExceptionEvent $event
+     */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
@@ -18,7 +21,7 @@ class ExceptionListener
         }
 
         if ($exception instanceof AccessDeniedHttpException) {
-            $event->setResponse(new JsonResponse(['error' => $exception->getMessage()], 401));
+            $event->setResponse(new JsonResponse(['error' => $exception->getMessage()], $exception->getStatusCode()));
         }
     }
 }
