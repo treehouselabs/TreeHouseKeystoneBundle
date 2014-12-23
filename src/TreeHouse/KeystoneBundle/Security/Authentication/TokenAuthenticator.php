@@ -4,6 +4,7 @@ namespace TreeHouse\KeystoneBundle\Security\Authentication;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\SimplePreAuthenticatorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -53,7 +54,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
     public function createToken(Request $request, $providerKey)
     {
         if (!$request->headers->has('X-Auth-Token')) {
-            throw new BadCredentialsException('No token found');
+            return null;
         }
 
         $authToken = (string) $request->headers->get('X-Auth-Token');
@@ -107,7 +108,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        return new JsonResponse(['error' => 'Authentication Failed.'], 403);
+        return new JsonResponse(['error' => 'Authentication Failed.'], Response::HTTP_FORBIDDEN);
     }
 
     /**
@@ -129,7 +130,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
                 throw new BadCredentialsException('The presented token cannot be empty.');
             }
 
-            list ($class, $username, $expires, $hash) = $this->tokenManager->getEncoder()->decodeHash($tokenEntity->getHash());
+            list($class, $username, $expires, $hash) = $this->tokenManager->getEncoder()->decodeHash($tokenEntity->getHash());
 
             $username = base64_decode($username, true);
 
@@ -156,7 +157,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
             throw new AuthenticationException('The hash is invalid.');
         }
 
-        list ($class, $username, $expires, $hash) = $parts;
+        list($class, $username, $expires, $hash) = $parts;
 
         if (false === $username = base64_decode($username, true)) {
             throw new AuthenticationException('$username contains a character from outside the base64 alphabet.');
