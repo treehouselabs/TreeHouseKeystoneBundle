@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use TreeHouse\KeystoneBundle\Exception\TokenExpiredException;
 use TreeHouse\KeystoneBundle\Manager\TokenManager;
 use TreeHouse\KeystoneBundle\Model\Token;
 use TreeHouse\KeystoneBundle\Security\Authentication\Token\PreAuthenticatedToken;
@@ -79,7 +80,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
         }
 
         if (false === $this->tokenManager->validate($tokenEntity)) {
-            throw new AuthenticationException('Token not valid');
+            throw new TokenExpiredException('Token not valid');
         }
 
         $user = $this->retrieveUser($userProvider, $tokenEntity);
@@ -108,7 +109,16 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        return new JsonResponse(['error' => 'Authentication Failed.'], Response::HTTP_FORBIDDEN);
+        $errorMessage = 'Authentication Failed.';
+        $responseCode = Response::HTTP_FORBIDDEN;
+
+        if ($exception instanceof TokenExpiredException) {
+            $errorMessage = 'Token expired';
+            // 419 HTTP Authentication Timeout, see http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+            $responseCode = 419;
+        }
+
+        return new JsonResponse(['error' => $errorMessage], $responseCode);
     }
 
     /**
