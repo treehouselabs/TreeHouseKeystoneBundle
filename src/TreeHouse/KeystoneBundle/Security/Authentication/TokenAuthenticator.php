@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\SimplePreAuthenticatorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
@@ -79,8 +80,8 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
             throw new BadCredentialsException('Bad token');
         }
 
-        if (false === $this->tokenManager->validate($tokenEntity)) {
-            throw new TokenExpiredException('Token not valid');
+        if (false === $this->tokenManager->isExpired($tokenEntity)) {
+            throw new TokenExpiredException('Token expired');
         }
 
         $user = $this->retrieveUser($userProvider, $tokenEntity);
@@ -105,17 +106,21 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
     }
 
     /**
+     * For correct http status codes see documentation at http://developer.openstack.org/api-ref-identity-v2.html
+     *
      * @inheritdoc
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        $errorMessage = 'Authentication Failed.';
-        $responseCode = Response::HTTP_FORBIDDEN;
+        $errorMessage = 'Authentication Failed';
+        $responseCode = Response::HTTP_BAD_REQUEST;
 
         if ($exception instanceof TokenExpiredException) {
             $errorMessage = 'Token expired';
-            // 419 HTTP Authentication Timeout, see http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-            $responseCode = 419;
+            $responseCode = Response::HTTP_UNAUTHORIZED;
+        } elseif ($exception instanceof AccountStatusException) {
+            $errorMessage = 'Account disabled';
+            $responseCode = Response::HTTP_FORBIDDEN;
         }
 
         return new JsonResponse(['error' => $errorMessage], $responseCode);

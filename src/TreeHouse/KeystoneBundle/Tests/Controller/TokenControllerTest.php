@@ -135,8 +135,27 @@ class TokenControllerTest extends WebTestCase
         );
         $response = $this->client->getResponse();
 
-        $this->assertEquals(419, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         $this->assertEquals(['error' => 'Token expired'], json_decode($response->getContent(), true));
+    }
+
+    public function testInvalidTokenRequest()
+    {
+        $tokenId = 'invalid-token';
+
+        $this->client->request(
+            'GET',
+            $this->getRoute('test_api'),
+            [],
+            [],
+            ['HTTP_X-Auth-Token' => $tokenId],
+            null,
+            true
+        );
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertEquals(['error' => 'Authentication Failed'], json_decode($response->getContent(), true));
     }
 
     /**

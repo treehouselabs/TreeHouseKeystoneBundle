@@ -99,9 +99,21 @@ class TokenManager
     /**
      * @param Token $token
      *
+     * @deprecated use $this->isExpired instead
+     *
      * @return boolean
      */
     public function validate(Token $token)
+    {
+        return $this->isExpired($token);
+    }
+
+    /**
+     * @param Token $token
+     *
+     * @return bool
+     */
+    public function isExpired(Token $token)
     {
         return new \DateTime() < $token->getExpiresAt();
     }
