@@ -99,18 +99,63 @@ class TokenControllerTest extends WebTestCase
     public function testNonAuthenticatedRequest()
     {
         $this->client->request('GET', $this->getRoute('test_api'));
-        $repsonse = $this->client->getResponse();
+        $response = $this->client->getResponse();
 
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $repsonse->getStatusCode());
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
     public function testAuthenticatedRequest()
     {
         $this->requestWithValidToken('GET', $this->getRoute('test_api'));
-        $repsonse = $this->client->getResponse();
+        $response = $this->client->getResponse();
 
-        $this->assertEquals(Response::HTTP_OK, $repsonse->getStatusCode());
-        $this->assertEquals(['ok' => 'it works!'], json_decode($repsonse->getContent(), true));
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertEquals(['ok' => 'it works!'], json_decode($response->getContent(), true));
+    }
+
+    public function testAuthenticatedExpiredTokenRequest()
+    {
+        $tokenId = $this->requestToken()['access']['token']['id'];
+
+        // expire token in database
+        $doctrine = static::$kernel->getContainer()->get('doctrine');
+        $token = $doctrine->getRepository('TreeHouseKeystoneBundle:Token')->find($tokenId);
+        $token->setExpiresAt(new \DateTime('-1 day'));
+        $doctrine->getManager()->flush();
+
+        // perform request with token that is now expired
+        $this->client->request(
+            'GET',
+            $this->getRoute('test_api'),
+            [],
+            [],
+            ['HTTP_X-Auth-Token' => $tokenId],
+            null,
+            true
+        );
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $this->assertEquals(['error' => 'Token expired'], json_decode($response->getContent(), true));
+    }
+
+    public function testInvalidTokenRequest()
+    {
+        $tokenId = 'invalid-token';
+
+        $this->client->request(
+            'GET',
+            $this->getRoute('test_api'),
+            [],
+            [],
+            ['HTTP_X-Auth-Token' => $tokenId],
+            null,
+            true
+        );
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertEquals(['error' => 'Authentication Failed'], json_decode($response->getContent(), true));
     }
 
     /**

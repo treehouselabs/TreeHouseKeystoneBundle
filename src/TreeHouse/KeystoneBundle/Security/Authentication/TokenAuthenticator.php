@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\SimplePreAuthenticatorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
@@ -14,6 +15,7 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use TreeHouse\KeystoneBundle\Exception\TokenExpiredException;
 use TreeHouse\KeystoneBundle\Manager\TokenManager;
 use TreeHouse\KeystoneBundle\Model\Token;
 use TreeHouse\KeystoneBundle\Security\Authentication\Token\PreAuthenticatedToken;
@@ -78,8 +80,8 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
             throw new BadCredentialsException('Bad token');
         }
 
-        if (false === $this->tokenManager->validate($tokenEntity)) {
-            throw new AuthenticationException('Token not valid');
+        if (false === $this->tokenManager->isExpired($tokenEntity)) {
+            throw new TokenExpiredException('Token expired');
         }
 
         $user = $this->retrieveUser($userProvider, $tokenEntity);
@@ -104,11 +106,24 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
     }
 
     /**
+     * For correct http status codes see documentation at http://developer.openstack.org/api-ref-identity-v2.html
+     *
      * @inheritdoc
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        return new JsonResponse(['error' => 'Authentication Failed.'], Response::HTTP_FORBIDDEN);
+        $errorMessage = 'Authentication Failed';
+        $responseCode = Response::HTTP_BAD_REQUEST;
+
+        if ($exception instanceof TokenExpiredException) {
+            $errorMessage = 'Token expired';
+            $responseCode = Response::HTTP_UNAUTHORIZED;
+        } elseif ($exception instanceof AccountStatusException) {
+            $errorMessage = 'Account disabled';
+            $responseCode = Response::HTTP_FORBIDDEN;
+        }
+
+        return new JsonResponse(['error' => $errorMessage], $responseCode);
     }
 
     /**
