@@ -50,6 +50,23 @@ class HttpPostFactory implements SecurityFactoryInterface
             ->replaceArgument(2, $id)
         ;
 
-        return [$providerId, $listenerId, $defaultEntryPoint];
+        $entryPointId = $this->createEntryPoint($container, $id, $defaultEntryPoint);
+
+        return [$providerId, $listenerId, $entryPointId];
+    }
+
+    protected function createEntryPoint(ContainerBuilder $container, $id, $defaultEntryPoint)
+    {
+        if (null !== $defaultEntryPoint) {
+            return $defaultEntryPoint;
+        }
+
+        $entryPointId = 'tree_house.keystone.http.entry_point.' . $id;
+        $container->setDefinition(
+            $entryPointId,
+            new DefinitionDecorator('tree_house.keystone.http.entry_point')
+        );
+
+        return $entryPointId;
     }
 }
