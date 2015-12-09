@@ -39,7 +39,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
     public function __construct(TokenManager $tokenManager, UserCheckerInterface $userChecker)
     {
         $this->tokenManager = $tokenManager;
-        $this->userChecker  = $userChecker;
+        $this->userChecker = $userChecker;
     }
 
     /**
@@ -69,7 +69,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
      */
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
-        /** @var PreAuthenticatedToken $token */
+        /* @var PreAuthenticatedToken $token */
         $authToken = $token->getToken();
         if (empty($authToken)) {
             $authToken = 'NONE_PROVIDED';
@@ -106,7 +106,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
     }
 
     /**
-     * For correct http status codes see documentation at http://developer.openstack.org/api-ref-identity-v2.html
+     * For correct http status codes see documentation at http://developer.openstack.org/api-ref-identity-v2.html.
      *
      * @inheritdoc
      */
@@ -141,7 +141,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
                 throw new BadCredentialsException('The credentials were changed from another session.');
             }
         } else {
-            if ("" === ($presentedToken = $token->getToken())) {
+            if ('' === ($presentedToken = $token->getToken())) {
                 throw new BadCredentialsException('The presented token cannot be empty.');
             }
 
@@ -162,6 +162,7 @@ class TokenAuthenticator implements SimplePreAuthenticatorInterface, Authenticat
      *
      * @throws AuthenticationException
      * @throws AuthenticationServiceException
+     *
      * @return UserInterface
      */
     protected function retrieveUser(UserProviderInterface $userProvider, Token $token)

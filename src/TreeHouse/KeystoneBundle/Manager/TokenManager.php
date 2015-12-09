@@ -4,9 +4,9 @@ namespace TreeHouse\KeystoneBundle\Manager;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
 use TreeHouse\KeystoneBundle\Entity\Token;
 use TreeHouse\KeystoneBundle\Security\Encoder\TokenEncoder;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class TokenManager
 {
@@ -21,22 +21,20 @@ class TokenManager
     protected $doctrine;
 
     /**
-     * Constructor.
-     *
      * @param TokenEncoder    $encoder
      * @param ManagerRegistry $doctrine
      */
     public function __construct(TokenEncoder $encoder, ManagerRegistry $doctrine)
     {
-        $this->encoder  = $encoder;
+        $this->encoder = $encoder;
         $this->doctrine = $doctrine;
     }
 
     /**
-     * Returns a token instance
+     * Returns a token instance.
      *
      * @param UserInterface $user
-     * @param integer       $ttl
+     * @param int           $ttl
      *
      * @return Token
      */
@@ -71,7 +69,7 @@ class TokenManager
     }
 
     /**
-     * Finds a token by id (which is itself a token)
+     * Finds a token by id (which is itself a token).
      *
      * @param string $token
      *
@@ -94,18 +92,6 @@ class TokenManager
         if ($andFlush) {
             $this->doctrine->getManager()->flush();
         }
-    }
-
-    /**
-     * @param Token $token
-     *
-     * @deprecated use $this->isExpired instead
-     *
-     * @return boolean
-     */
-    public function validate(Token $token)
-    {
-        return $this->isExpired($token);
     }
 
     /**

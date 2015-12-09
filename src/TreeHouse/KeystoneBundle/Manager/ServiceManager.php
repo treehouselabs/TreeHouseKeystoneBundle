@@ -34,7 +34,7 @@ class ServiceManager
     }
 
     /**
-     * Add service
+     * Add service.
      *
      * @param Service $service
      */
@@ -44,7 +44,7 @@ class ServiceManager
     }
 
     /**
-     * Returns all services
+     * Returns all services.
      *
      * @return Service[]
      */

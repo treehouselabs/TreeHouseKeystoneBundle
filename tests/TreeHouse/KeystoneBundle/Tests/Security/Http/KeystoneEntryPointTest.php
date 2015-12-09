@@ -14,7 +14,7 @@ class KeystoneEntryPointTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->prophesize(Request::class);
         $entryPoint = new KeystoneEntryPoint();
-        $authException = new AuthenticationException('The exception message');;
+        $authException = new AuthenticationException('The exception message');
 
         $this->assertInstanceOf(AuthenticationEntryPointInterface::class, $entryPoint);
 

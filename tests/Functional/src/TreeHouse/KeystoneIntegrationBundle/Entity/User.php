@@ -18,12 +18,12 @@ class User extends \TreeHouse\KeystoneBundle\Model\User
     protected $id;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $superAdmin;
 
     /**
-     * @param boolean $superAdmin
+     * @param bool $superAdmin
      */
     public function __construct($superAdmin = false)
     {
@@ -31,7 +31,7 @@ class User extends \TreeHouse\KeystoneBundle\Model\User
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isSuperAdmin()
     {

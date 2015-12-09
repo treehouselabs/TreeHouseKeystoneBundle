@@ -2,8 +2,6 @@
 
 namespace TreeHouse\KeystoneBundle\Security\Encoder;
 
-use Symfony\Component\Security\Core\Util\StringUtils;
-
 class TokenEncoder
 {
     const HASH_DELIMITER = ':';
@@ -42,46 +40,46 @@ class TokenEncoder
     }
 
     /**
-     * @param string  $class
-     * @param string  $username
-     * @param string  $password
-     * @param integer $expires
+     * @param string $class
+     * @param string $username
+     * @param string $password
+     * @param int    $expires
      *
      * @return string
      */
     public function generateHash($class, $username, $password, $expires)
     {
-        return hash('sha256', $class.$username.$password.$expires.$this->secret);
+        return hash('sha256', $class . $username . $password . $expires . $this->secret);
     }
 
     /**
      * @param string $hash1
      * @param string $hash2
      *
-     * @return boolean
+     * @return bool
      *
      * @see StringUtils::equals()
      */
     public function compareHashes($hash1, $hash2)
     {
-        return StringUtils::equals($hash1, $hash2);
+        return hash_equals($hash1, $hash2);
     }
 
     /**
-     * @param string  $class
-     * @param string  $username
-     * @param string  $password
-     * @param integer $expires
+     * @param string $class
+     * @param string $username
+     * @param string $password
+     * @param int    $expires
      *
      * @return string
      */
     public function generateTokenValue($class, $username, $password, $expires)
     {
-        return $this->encodeHash(array(
+        return $this->encodeHash([
             $class,
             base64_encode($username),
             $expires,
             $this->generateHash($class, $username, $password, $expires),
-        ));
+        ]);
     }
 }

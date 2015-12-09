@@ -42,7 +42,7 @@ abstract class WebTestCase extends BaseWebTestCase
     {
         parent::setUp();
 
-        $this->client = $this->createClient();
+        $this->client = $this->createClient(['debug' => false]);
 
         $container = static::$kernel->getContainer();
 
@@ -155,13 +155,13 @@ abstract class WebTestCase extends BaseWebTestCase
     }
 
     /**
-     * @param string  $method
-     * @param string  $uri
-     * @param array   $parameters
-     * @param array   $files
-     * @param array   $server
-     * @param string  $content
-     * @param boolean $changeHistory
+     * @param string $method
+     * @param string $uri
+     * @param array  $parameters
+     * @param array  $files
+     * @param array  $server
+     * @param string $content
+     * @param bool   $changeHistory
      *
      * @return Crawler
      */

@@ -20,7 +20,7 @@ class Token
     protected $expiresAt;
 
     /**
-     * Get id
+     * Get id.
      *
      * @return string
      */
@@ -30,7 +30,7 @@ class Token
     }
 
     /**
-     * Set hash
+     * Set hash.
      *
      * @param string $hash
      *
@@ -44,7 +44,7 @@ class Token
     }
 
     /**
-     * Get hash
+     * Get hash.
      *
      * @return string
      */
@@ -54,7 +54,7 @@ class Token
     }
 
     /**
-     * Set expiresAt
+     * Set expiresAt.
      *
      * @param \DateTime $expiresAt
      *
@@ -68,7 +68,7 @@ class Token
     }
 
     /**
-     * Get expires
+     * Get expires.
      *
      * @return \DateTime
      */
