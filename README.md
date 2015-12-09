@@ -22,7 +22,7 @@ http://developer.openstack.org/api-ref-identity-v2.html
 ## Installation
 
 ```sh
-composer require treehouselabs/keystone-bundle:^1.0
+composer require treehouselabs/keystone-bundle:^2.0
 ```
 
 
