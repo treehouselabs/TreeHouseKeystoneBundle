@@ -3,7 +3,7 @@ imports:
   - { resource: security.yml }
 
 framework:
-  secret:          %secret%
+  secret:          '%secret%'
   router:          { resource: "%kernel.root_dir%/config/routing_test.yml" }
   form:            true
   csrf_protection: true
@@ -12,52 +12,52 @@ framework:
   profiler:        { only_exceptions: false }
   test:            ~
   session:
-    storage_id:    session.storage.filesystem
+    storage_id:    'session.storage.filesystem'
 
 twig:
-  debug:            %kernel.debug%
-  strict_variables: %kernel.debug%
+  debug:            '%kernel.debug%'
+  strict_variables: '%kernel.debug%'
 
 # Doctrine Configuration
 doctrine:
   dbal:
-    driver:   pdo_sqlite
+    driver:   'pdo_sqlite'
     host:     ~
     port:     ~
     dbname:   ~
     user:     ~
     password: ~
-    logging:  %kernel.debug%
-    path:     /tmp/keystone.sqlite
-    charset:  UTF8
+    logging:  '%kernel.debug%'
+    path:     '/tmp/keystone.sqlite'
+    charset:  'UTF8'
 
   orm:
-    auto_generate_proxy_classes: %kernel.debug%
+    auto_generate_proxy_classes: '%kernel.debug%'
     auto_mapping: true
-    metadata_cache_driver: array
-    naming_strategy: doctrine.orm.naming_strategy.underscore
+    metadata_cache_driver: 'array'
+    naming_strategy: 'doctrine.orm.naming_strategy.underscore'
     mappings:
       TreeHouseKeystoneIntegrationBundle:
-        dir: %kernel.root_dir%/../src/TreeHouse/KeystoneIntegrationBundle/Resources/config/doctrine/
-        type: xml
-        prefix: TreeHouse\KeystoneIntegrationBundle\Entity
+        dir: '%kernel.root_dir%/../src/TreeHouse/KeystoneIntegrationBundle/Resources/config/doctrine/'
+        type: 'xml'
+        prefix: 'TreeHouse\KeystoneIntegrationBundle\Entity'
         is_bundle: false
 
 monolog:
   handlers:
     main:
-      type:  stream
-      path:  %kernel.logs_dir%/%kernel.environment%.log
-      level: debug
+      type:  'stream'
+      path:  '%kernel.logs_dir%/%kernel.environment%.log'
+      level: 'debug'
 
 tree_house_keystone:
-  user_class: TreeHouse\KeystoneIntegrationBundle\Entity\User
+  user_class: 'TreeHouse\KeystoneIntegrationBundle\Entity\User'
   services:
     api:
-      type: compute
-      endpoint: http://example.org
-      role: ROLE_USER
+      type: 'compute'
+      endpoint: 'http://example.org'
+      role: 'ROLE_USER'
     super_secure_service:
-      type: compute
-      endpoint: http://example.org
+      type: 'compute'
+      endpoint: 'http://example.org'
       expression: '"ROLE_ADMIN" in roles or (user and user.isSuperAdmin())'

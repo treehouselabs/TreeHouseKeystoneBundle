@@ -1,9 +1,11 @@
 get_token:
-  pattern: /api/tokens
-  defaults: { _controller: TreeHouseKeystoneBundle:Token:create }
+  path: '/api/tokens'
+  defaults:
+    _controller: 'TreeHouseKeystoneBundle:Token:create'
   requirements:
-    _method: POST
+    _method: 'POST'
 
 test_api:
-  pattern: /api/test
-  defaults: { _controller: TreeHouseKeystoneIntegrationBundle:Api:test }
+  path: '/api/test'
+  defaults:
+    _controller: 'TreeHouseKeystoneIntegrationBundle:Api:test'
