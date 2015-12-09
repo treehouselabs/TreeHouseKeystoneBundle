@@ -4,6 +4,7 @@ parameters:
   tree_house.keystone.authentication.listener.http_post.class: TreeHouse\KeystoneBundle\Security\Firewall\HttpPostAuthenticationListener
   tree_house.keystone.authentication.provider.user.class: Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider
   tree_house.keystone.encoder.token.class: TreeHouse\KeystoneBundle\Security\Encoder\TokenEncoder
+  tree_house.keystone.http.entry_point.class: TreeHouse\KeystoneBundle\Security\Http\KeystoneEntryPoint
 
 services:
   tree_house.keystone.user_provider.default:
@@ -40,3 +41,6 @@ services:
     class: %tree_house.keystone.encoder.token.class%
     arguments:
       - %secret%
+
+  tree_house.keystone.http.entry_point:
+    class: %tree_house.keystone.http.entry_point.class%

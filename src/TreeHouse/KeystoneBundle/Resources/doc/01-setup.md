@@ -51,6 +51,7 @@ security:
       stateless: true
       simple_preauth:
         authenticator: tree_house.keystone.token_authenticator
+      entry_point: tree_house.keystone.http.entry_point  
 ```
 
 That's it, now `/api/tokens` will expect authentication using a POST request with json data.
