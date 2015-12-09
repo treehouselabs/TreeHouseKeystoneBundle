@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\User\UserInterface as BaseInterface;
 interface UserInterface extends BaseInterface
 {
     /**
-     * @param boolean $enabled
+     * @param bool $enabled
      *
      * @return $this
      */
@@ -44,7 +44,7 @@ interface UserInterface extends BaseInterface
     /**
      * @param string $role
      *
-     * @return boolean
+     * @return bool
      */
     public function hasRole($role);
 

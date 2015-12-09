@@ -83,10 +83,10 @@ class UserProvider implements UserProviderInterface
             // might have changed without proper persistence in the database.
             $meta = $this->getClassMetadata($this->userClass);
             if (!$id = $meta->getIdentifierValues($user)) {
-                throw new \InvalidArgumentException("You cannot refresh a user ".
-                    "from the EntityUserProvider that does not contain an identifier. ".
-                    "The user object has to be serialized with its own identifier " .
-                    "mapped by Doctrine."
+                throw new \InvalidArgumentException('You cannot refresh a user ' .
+                    'from the EntityUserProvider that does not contain an identifier. ' .
+                    'The user object has to be serialized with its own identifier ' .
+                    'mapped by Doctrine.'
                 );
             }
 

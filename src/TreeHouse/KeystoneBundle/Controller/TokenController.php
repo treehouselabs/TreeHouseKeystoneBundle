@@ -4,7 +4,6 @@ namespace TreeHouse\KeystoneBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use TreeHouse\KeystoneBundle\Manager\ServiceManager;
@@ -27,14 +26,14 @@ class TokenController extends Controller
         }
 
         $manager = $this->getTokenManager();
-        $token   = $manager->createToken($user, 3600);
+        $token = $manager->createToken($user, 3600);
 
         $data = [
             'access' => [
-                'token'          => $this->getTokenData($token),
-                'user'           => $this->getUserData($user),
-                'serviceCatalog' => $this->getServiceCatalog($token)
-            ]
+                'token' => $this->getTokenData($token),
+                'user' => $this->getUserData($user),
+                'serviceCatalog' => $this->getServiceCatalog(),
+            ],
         ];
 
         return new JsonResponse($data, 200, ['Vary' => 'X-Auth-Token']);
@@ -48,8 +47,8 @@ class TokenController extends Controller
     protected function getTokenData(Token $token)
     {
         return [
-            'id'      => $token->getId(),
-            'expires' => $token->getExpiresAt()->format(\DateTime::ISO8601)
+            'id' => $token->getId(),
+            'expires' => $token->getExpiresAt()->format(\DateTime::ISO8601),
         ];
     }
 
@@ -65,8 +64,8 @@ class TokenController extends Controller
             $endpoints = [];
             foreach ($service->getEndpoints() as $endpoint) {
                 $endpoints[] = [
-                    'adminUrl'  => $endpoint->getAdminUrl(),
-                    'publicUrl' => $endpoint->getPublicUrl()
+                    'adminUrl' => $endpoint->getAdminUrl(),
+                    'publicUrl' => $endpoint->getPublicUrl(),
                 ];
             }
 
@@ -85,8 +84,7 @@ class TokenController extends Controller
      */
     protected function getUserServices()
     {
-        /** @var SecurityContextInterface $securityContext */
-        $securityContext = $this->container->get('security.context');
+        $securityContext = $this->container->get('security.authorization_checker');
 
         // filter out services that the user is not granted
         return array_filter(
@@ -107,7 +105,7 @@ class TokenController extends Controller
     protected function getUserData(UserInterface $user)
     {
         return [
-            'id'       => $this->getUserId($user),
+            'id' => $this->getUserId($user),
             'username' => $user->getUsername(),
         ];
     }
@@ -124,7 +122,7 @@ class TokenController extends Controller
     protected function getUserId(UserInterface $user)
     {
         $class = $this->container->getParameter('tree_house.keystone.model.user.class');
-        $meta  = $this->getDoctrine()->getManagerForClass($class)->getClassMetadata($class);
+        $meta = $this->getDoctrine()->getManagerForClass($class)->getClassMetadata($class);
 
         $ids = $meta->getIdentifierValues($user);
         if (sizeof($ids) === 1) {

@@ -20,8 +20,6 @@ class Token
     protected $expiresAt;
 
     /**
-     * Get id
-     *
      * @return string
      */
     public function getId()
@@ -30,8 +28,6 @@ class Token
     }
 
     /**
-     * Set hash
-     *
      * @param string $hash
      *
      * @return Token
@@ -44,8 +40,6 @@ class Token
     }
 
     /**
-     * Get hash
-     *
      * @return string
      */
     public function getHash()
@@ -54,8 +48,6 @@ class Token
     }
 
     /**
-     * Set expiresAt
-     *
      * @param \DateTime $expiresAt
      *
      * @return Token
@@ -68,8 +60,6 @@ class Token
     }
 
     /**
-     * Get expires
-     *
      * @return \DateTime
      */
     public function getExpiresAt()

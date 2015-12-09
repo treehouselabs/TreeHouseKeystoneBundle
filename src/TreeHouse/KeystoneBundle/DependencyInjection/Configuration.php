@@ -67,7 +67,7 @@ YAML
                                 ->info('Defines an endpoint at which this service can be accessed')
                                 // single endpoint, supplied as a string
                                 ->beforeNormalization()
-                                    ->ifString()->then(function ($v) { return array($v); })
+                                    ->ifString()->then(function ($v) { return [$v]; })
                                 ->end()
                                 // single endpoint, supplied as an array
                                 ->beforeNormalization()

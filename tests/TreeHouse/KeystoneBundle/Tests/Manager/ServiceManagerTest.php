@@ -29,8 +29,8 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testServices()
     {
-        $name   = 'api';
-        $type   = 'compute';
+        $name = 'api';
+        $type = 'compute';
         $grants = 'ROLE_API_USER';
 
         $service = new Service($name, $type, $grants);

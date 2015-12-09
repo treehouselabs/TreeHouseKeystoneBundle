@@ -14,13 +14,13 @@ class TokenControllerTest extends WebTestCase
                 'passwordCredentials' => [
                     'username' => 'non-existing-user',
                     'password' => static::$password,
-                ]
-            ]
+                ],
+            ],
         ];
 
         $response = $this->doTokenRequest($data);
 
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
     public function testGetTokenWithInvalidPassword()
@@ -30,20 +30,20 @@ class TokenControllerTest extends WebTestCase
                 'passwordCredentials' => [
                     'username' => static::$username,
                     'password' => '1234' . uniqid(),
-                ]
-            ]
+                ],
+            ],
         ];
 
         $response = $this->doTokenRequest($data);
 
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
     public function testGetTokenWithoutPostData()
     {
         $response = $this->doTokenRequest('');
 
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
     public function testGetTokenWithBadMethod()
@@ -60,12 +60,12 @@ class TokenControllerTest extends WebTestCase
                 'passwordCredentials' => [
                     'username' => static::$username,
                     'password' => static::$password,
-                ]
-            ]
+                ],
+            ],
         ];
 
         $response = $this->doTokenRequest($data);
-        $result   = json_decode($response->getContent(), true);
+        $result = json_decode($response->getContent(), true);
 
         // check for the right structure
         $this->assertInternalType('array', $result);
@@ -91,7 +91,7 @@ class TokenControllerTest extends WebTestCase
         $this->assertEquals('compute', $result['access']['serviceCatalog'][0]['type']);
 
         $endpoints = [
-            ['adminUrl' => 'http://example.org', 'publicUrl' => 'http://example.org']
+            ['adminUrl' => 'http://example.org', 'publicUrl' => 'http://example.org'],
         ];
         $this->assertEquals($endpoints, $result['access']['serviceCatalog'][0]['endpoints']);
     }
@@ -101,7 +101,7 @@ class TokenControllerTest extends WebTestCase
         $this->client->request('GET', $this->getRoute('test_api'));
         $response = $this->client->getResponse();
 
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
     public function testAuthenticatedRequest()

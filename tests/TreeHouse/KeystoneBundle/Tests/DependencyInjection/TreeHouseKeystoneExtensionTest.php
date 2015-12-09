@@ -19,7 +19,7 @@ class TreeHouseKeystoneExtensionTest extends \PHPUnit_Framework_TestCase
         $parameters = [
             'tree_house.keystone.model.user.class' => 'TreeHouse\KeystoneIntegrationBundle\Entity\User',
             'tree_house.keystone.user_provider.id' => 'my_user_provider',
-            'tree_house.keystone.service_types'    => ['foo', 'bar', 'baz'],
+            'tree_house.keystone.service_types' => ['foo', 'bar', 'baz'],
         ];
 
         foreach ($parameters as $name => $value) {
@@ -59,7 +59,7 @@ class TreeHouseKeystoneExtensionTest extends \PHPUnit_Framework_TestCase
         );
 
         // test that the service is added to the manager
-        list ($method, $args) = $manager->getMethodCalls()[1];
+        list($method, $args) = $manager->getMethodCalls()[1];
         $this->assertEquals('addService', $method);
         $this->assertEquals('tree_house.keystone.service.foo', (string) current($args));
     }
@@ -143,7 +143,7 @@ class TreeHouseKeystoneExtensionTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder(new ParameterBag(array_merge($parameters, ['kernel.debug' => $debug])));
         $container->registerExtension(new TreeHouseKeystoneExtension());
 
-        $locator = new FileLocator(__DIR__.'/fixtures');
+        $locator = new FileLocator(__DIR__ . '/fixtures');
         $loader = new YamlFileLoader($container, $locator);
         $loader->load($file);
 

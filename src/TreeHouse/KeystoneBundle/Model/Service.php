@@ -31,14 +31,14 @@ class Service
      */
     public function __construct($name, $type, $grants)
     {
-        $this->name      = $name;
-        $this->type      = $type;
-        $this->grants    = $grants;
+        $this->name = $name;
+        $this->type = $type;
+        $this->grants = $grants;
         $this->endpoints = [];
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -52,7 +52,7 @@ class Service
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -62,7 +62,7 @@ class Service
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
      *
@@ -76,7 +76,7 @@ class Service
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -106,7 +106,7 @@ class Service
     }
 
     /**
-     * Add endpoint
+     * Add endpoint.
      *
      * @param string $publicUrl
      * @param string $adminUrl
@@ -126,7 +126,7 @@ class Service
     }
 
     /**
-     * Get endpoints
+     * Get endpoints.
      *
      * @return Endpoint[]
      */

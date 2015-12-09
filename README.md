@@ -1,26 +1,30 @@
-TreeHouseKeystoneBundle
-=======================
+KeystoneBundle
+==============
 
-A Symfony2 implementation of the [OpenStack Identity Service API][1],
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE.md)
+[![Build Status][ico-travis]][link-travis]
+[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
+[![Quality Score][ico-code-quality]][link-code-quality]
+
+A Symfony2 implementation of the [OpenStack Identity API v2.0][1],
 built on top of it's security component.
-
-[![Build Status](https://travis-ci.org/treehouselabs/TreeHouseKeystoneBundle.svg)](https://travis-ci.org/treehouselabs/TreeHouseKeystoneBundle)
 
 You can use this bundle to add a token-based authentication
 mechanism. The token is sent using an HTTP header.
 
 More information about the protocol can be found here:
-http://docs.openstack.org/api/openstack-identity-service/2.0/
+http://developer.openstack.org/api-ref-identity-v2.html
 
-[1]: http://docs.openstack.org/api/openstack-identity-service/2.0/
+[1]: http://developer.openstack.org/api-ref-identity-v2.html
 
-## Notes
-This bundle is a work in progress and does not cover the
-_complete_ OpenStack Indentity Service API spec. While we
-are pretty confident about the quality of this
-implementation thus far, we are not experts in this field.
 
-Use at your own risk!
+## Installation
+
+```sh
+composer require treehouselabs/keystone-bundle:^2.0
+```
+
 
 ## Documentation
 
@@ -32,12 +36,47 @@ Use at your own risk!
 [doc-services]:       /src/TreeHouse/KeystoneBundle/Resources/doc/02-defining-services.md
 [doc-authenticating]: /src/TreeHouse/KeystoneBundle/Resources/doc/03-authenticating.md
 
+
+## Notes
+This bundle does not cover the _complete_ OpenStack Indentity API spec. While
+we are pretty confident about the quality of this implementation thus far, and
+use it in production ourselves, we are not experts in this field. Use at your
+own risk.
+
+
+## Security
+
+If you discover any security related issues, please email dev@treehouse.nl
+instead of using the issue tracker.
+
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+
 ## Acknowledgements
+
 Some parts are inspired by [FOSUserBundle](https://github.com/FriendsOfSymfony/FOSUserBundle).
 
-## Contribute
-You can report problems, bugs, or feature requests to the
-[issue tracker](https://github.com/treehouselabs/TreeHouseKeystoneBundle/issues).
 
-If you have a patch or other update, feel free to send us a
-[pull request](https://github.com/treehouselabs/TreeHouseKeystoneBundle/pulls).
+## Credits
+
+- [Peter Kruithof][link-pkruithof]
+- [All Contributors][link-contributors]
+
+
+[ico-version]: https://img.shields.io/packagist/v/treehouselabs/keystone-bundle.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/treehouselabs/keystone-bundle/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/treehouselabs/keystone-bundle.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/treehouselabs/keystone-bundle.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/treehouselabs/keystone-bundle.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/treehouselabs/keystone-bundle
+[link-travis]: https://travis-ci.org/treehouselabs/keystone-bundle
+[link-scrutinizer]: https://scrutinizer-ci.com/g/treehouselabs/keystone-bundle/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/treehouselabs/keystone-bundle
+[link-downloads]: https://packagist.org/packages/treehouselabs/keystone-bundle
+[link-author]: https://github.com/treehouselabs
+[link-contributors]: ../../contributors

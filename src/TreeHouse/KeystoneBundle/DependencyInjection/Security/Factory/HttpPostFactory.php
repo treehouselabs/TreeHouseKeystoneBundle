@@ -44,7 +44,7 @@ class HttpPostFactory implements SecurityFactoryInterface
             ->replaceArgument(2, $id)
         ;
 
-        $listenerId = 'tree_house.keystone.authentication.listener.http_post.'.$id;
+        $listenerId = 'tree_house.keystone.authentication.listener.http_post.' . $id;
         $container
             ->setDefinition($listenerId, new DefinitionDecorator('tree_house.keystone.authentication.listener.http_post'))
             ->replaceArgument(2, $id)

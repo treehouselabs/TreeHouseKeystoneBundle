@@ -8,27 +8,27 @@ namespace TreeHouse\KeystoneBundle\Model;
 abstract class User implements UserInterface
 {
     /**
-     * @var string $username
+     * @var string
      */
     protected $username;
 
     /**
-     * @var string $password
+     * @var string
      */
     protected $password;
 
     /**
-     * @var string $salt
+     * @var string
      */
     protected $salt;
 
     /**
-     * @var array $roles
+     * @var array
      */
     protected $roles = [];
 
     /**
-     * @var boolean $enabled
+     * @var bool
      */
     protected $enabled;
 

@@ -6,18 +6,18 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 
 class HttpPostAuthenticationListener implements ListenerInterface
 {
     /**
-     * @var SecurityContextInterface
+     * @var TokenStorageInterface
      */
-    protected $securityContext;
+    protected $tokenStorage;
 
     /**
      * @var AuthenticationManagerInterface
@@ -35,7 +35,7 @@ class HttpPostAuthenticationListener implements ListenerInterface
     protected $logger;
 
     /**
-     * @param SecurityContextInterface       $securityContext
+     * @param TokenStorageInterface          $tokenStorage
      * @param AuthenticationManagerInterface $authenticationManager
      * @param string                         $providerKey
      * @param LoggerInterface                $logger
@@ -43,24 +43,24 @@ class HttpPostAuthenticationListener implements ListenerInterface
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        SecurityContextInterface $securityContext,
+        TokenStorageInterface $tokenStorage,
         AuthenticationManagerInterface $authenticationManager,
         $providerKey,
         LoggerInterface $logger = null
-    )
-    {
+    ) {
         if (empty($providerKey)) {
             throw new \InvalidArgumentException('$providerKey must not be empty.');
         }
 
-        $this->securityContext       = $securityContext;
+        $this->tokenStorage = $tokenStorage;
         $this->authenticationManager = $authenticationManager;
-        $this->providerKey           = $providerKey;
-        $this->logger                = $logger;
+        $this->providerKey = $providerKey;
+        $this->logger = $logger;
     }
 
     /**
      * @inheritdoc
+     *
      * @see http://docs.openstack.org/api/openstack-identity-service/2.0/content/POST_authenticate_v2.0_tokens_Admin_API_Service_Developer_Operations-d1e1356.html
      */
     public function handle(GetResponseEvent $event)
@@ -85,9 +85,9 @@ class HttpPostAuthenticationListener implements ListenerInterface
 
         try {
             $token = $this->authenticationManager->authenticate($token);
-            $this->securityContext->setToken($token);
+            $this->tokenStorage->setToken($token);
         } catch (AuthenticationException $failed) {
-            $this->securityContext->setToken(null);
+            $this->tokenStorage->setToken(null);
 
             if (null !== $this->logger) {
                 $this->logger->info(
@@ -104,7 +104,7 @@ class HttpPostAuthenticationListener implements ListenerInterface
     }
 
     /**
-     * Parses JSON data and creates a username/password token
+     * Parses JSON data and creates a username/password token.
      *
      * @param array $data
      *

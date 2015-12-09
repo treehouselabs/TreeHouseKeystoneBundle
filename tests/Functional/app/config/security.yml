@@ -1,29 +1,31 @@
 security:
   encoders:
-    TreeHouse\KeystoneBundle\Model\User: sha256
-    TreeHouse\KeystoneIntegrationBundle\Entity\User: sha256
+    TreeHouse\KeystoneBundle\Model\User: 'sha256'
+    TreeHouse\KeystoneIntegrationBundle\Entity\User: 'sha256'
 
   role_hierarchy:
-    ROLE_API_USER:    ROLE_USER
-    ROLE_ADMIN:       ROLE_USER
-    ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+    ROLE_API_USER:    'ROLE_USER'
+    ROLE_ADMIN:       'ROLE_USER'
+    ROLE_SUPER_ADMIN: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_ALLOWED_TO_SWITCH']
 
   providers:
     main:
-      entity: { class: TreeHouseKeystoneIntegrationBundle:User, property: username }
+      entity:
+        class: 'TreeHouseKeystoneIntegrationBundle:User'
+        property: 'username'
 
   firewalls:
     api_tokens:
-      pattern:   ^/api/tokens
+      pattern:   '^/api/tokens'
       stateless: true
       keystone-user: ~
 
     api:
-      pattern:   ^/api/
-      provider:  main
+      pattern:   '^/api/'
+      provider:  'main'
       stateless: true
       simple_preauth:
-        authenticator: tree_house.keystone.token_authenticator
-      entry_point: tree_house.keystone.http.entry_point
+        authenticator: 'tree_house.keystone.token_authenticator'
+      entry_point: 'tree_house.keystone.http.entry_point'
 
   access_control:
