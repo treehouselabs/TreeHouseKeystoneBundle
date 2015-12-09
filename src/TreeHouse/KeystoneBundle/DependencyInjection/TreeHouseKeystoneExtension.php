@@ -9,6 +9,8 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\HttpKernel\Kernel;
+use TreeHouse\KeystoneBundle\Security\Authentication\LegacyTokenAuthenticator;
 
 class TreeHouseKeystoneExtension extends Extension
 {
@@ -32,6 +34,7 @@ class TreeHouseKeystoneExtension extends Extension
         $container->setAlias('tree_house.keystone.user_provider', $userProviderServiceId);
 
         $this->loadServices($container, $config['services'], $config['service_types']);
+        $this->replaceLegacyTokenAuthenticator($container);
     }
 
     /**
@@ -41,7 +44,7 @@ class TreeHouseKeystoneExtension extends Extension
      *
      * @throws \LogicException
      */
-    protected function loadServices(ContainerBuilder $container, array $services, array $types)
+    private function loadServices(ContainerBuilder $container, array $services, array $types)
     {
         $manager = $container->getDefinition('tree_house.keystone.service_manager');
         $manager->addMethodCall('setTypes', [$types]);
@@ -97,6 +100,21 @@ EOT
             }
 
             $manager->addMethodCall('addService', [new Reference($id)]);
+        }
+    }
+
+    /**
+     * Replaces token authenticator service with legacy class for older Symfony versions.
+     *
+     * @todo remove when Symfony 2.6 and 2.7 are no longer supported
+     *
+     * @param ContainerBuilder $container
+     */
+    private function replaceLegacyTokenAuthenticator(ContainerBuilder $container)
+    {
+        if (Kernel::MAJOR_VERSION === 2 && Kernel::MINOR_VERSION < 8) {
+            $definition = $container->getDefinition('tree_house.keystone.token_authenticator');
+            $definition->setClass(LegacyTokenAuthenticator::class);
         }
     }
 }
