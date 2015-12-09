@@ -112,7 +112,7 @@ EOT
      */
     private function replaceLegacyTokenAuthenticator(ContainerBuilder $container)
     {
-        if (Kernel::MAJOR_VERSION === 2 && Kernel::MINOR_VERSION < 8) {
+        if ((int) Kernel::MAJOR_VERSION === 2 && Kernel::MINOR_VERSION < 8) {
             $definition = $container->getDefinition('tree_house.keystone.token_authenticator');
             $definition->setClass(LegacyTokenAuthenticator::class);
         }

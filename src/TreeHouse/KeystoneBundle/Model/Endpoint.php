@@ -20,8 +20,6 @@ class Endpoint
     protected $service;
 
     /**
-     * Set publicUrl.
-     *
      * @param string $publicUrl
      *
      * @return Endpoint
@@ -34,8 +32,6 @@ class Endpoint
     }
 
     /**
-     * Get publicUrl.
-     *
      * @return string
      */
     public function getPublicUrl()
@@ -44,8 +40,6 @@ class Endpoint
     }
 
     /**
-     * Set adminUrl.
-     *
      * @param string $adminUrl
      *
      * @return Endpoint
@@ -58,8 +52,6 @@ class Endpoint
     }
 
     /**
-     * Get adminUrl.
-     *
      * @return string
      */
     public function getAdminUrl()
@@ -68,8 +60,6 @@ class Endpoint
     }
 
     /**
-     * Set service.
-     *
      * @param Service $service
      *
      * @return Endpoint
@@ -82,8 +72,6 @@ class Endpoint
     }
 
     /**
-     * Get service.
-     *
      * @return Service
      */
     public function getService()

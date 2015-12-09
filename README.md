@@ -62,7 +62,7 @@ Some parts are inspired by [FOSUserBundle](https://github.com/FriendsOfSymfony/F
 
 ## Credits
 
-- [Peter Kruithof][link-author]
+- [Peter Kruithof][link-pkruithof]
 - [All Contributors][link-contributors]
 
 
