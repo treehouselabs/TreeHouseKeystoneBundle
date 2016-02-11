@@ -101,7 +101,7 @@ class TokenManager
      */
     public function isExpired(Token $token)
     {
-        return new \DateTime() < $token->getExpiresAt();
+        return new \DateTime() > $token->getExpiresAt();
     }
 
     /**
