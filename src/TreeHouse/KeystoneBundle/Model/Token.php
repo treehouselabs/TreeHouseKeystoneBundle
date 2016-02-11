@@ -30,7 +30,7 @@ class Token
     /**
      * @param string $hash
      *
-     * @return Token
+     * @return $this
      */
     public function setHash($hash)
     {
@@ -50,7 +50,7 @@ class Token
     /**
      * @param \DateTime $expiresAt
      *
-     * @return Token
+     * @return $this
      */
     public function setExpiresAt($expiresAt)
     {

@@ -79,7 +79,7 @@ abstract class AbstractTokenAuthenticator implements AuthenticationFailureHandle
             throw new BadCredentialsException('Bad token');
         }
 
-        if (false === $this->tokenManager->isExpired($tokenEntity)) {
+        if (true === $this->tokenManager->isExpired($tokenEntity)) {
             throw new TokenExpiredException('Token expired');
         }
 
