@@ -95,6 +95,17 @@ class TokenManager
     }
 
     /**
+     * Removes a Token.
+     *
+     * @param Token $token
+     */
+    public function removeToken(Token $token)
+    {
+        $this->doctrine->getManager()->remove($token);
+        $this->doctrine->getManager()->flush();
+    }
+
+    /**
      * @param Token $token
      *
      * @return bool
