@@ -22,6 +22,13 @@ use TreeHouse\KeystoneBundle\Security\Authentication\Token\PreAuthenticatedToken
 abstract class AbstractTokenAuthenticator implements AuthenticationFailureHandlerInterface
 {
     /**
+     * Whether or not expired tokens should be automatically removed.
+     *
+     * @var bool
+     */
+    protected $autoRemoveExpiredToken = false;
+
+    /**
      * @var TokenManager
      */
     protected $tokenManager;
@@ -80,6 +87,10 @@ abstract class AbstractTokenAuthenticator implements AuthenticationFailureHandle
         }
 
         if (true === $this->tokenManager->isExpired($tokenEntity)) {
+            if (true === $this->autoRemoveExpiredToken) {
+                $this->tokenManager->removeToken($tokenEntity);
+            }
+
             throw new TokenExpiredException('Token expired');
         }
 
